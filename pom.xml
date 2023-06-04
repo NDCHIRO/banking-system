@@ -1,0 +1,94 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+ 
+    <groupId>com.ejada</groupId>
+    <artifactId>pilot.primefaces</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>war</packaging>
+ 
+    <name>pilot.primefaces</name>
+
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <junit.version>4.12</junit.version>
+        <servlet.version>3.1.0</servlet.version>
+        <mojarra.version>2.2.12</mojarra.version>
+        <primefaces.version>10.0.0</primefaces.version>
+        <maven.compiler.plugin.version>3.3.1</maven.compiler.plugin.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>    
+       
+    </properties>
+
+<dependencies>
+    <!-- JUnit -->
+    <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>4.13.2</version>
+        <scope>test</scope>
+    </dependency>
+    
+    <!-- Servlet API -->
+    <dependency>
+        <groupId>javax.servlet</groupId>
+        <artifactId>javax.servlet-api</artifactId>
+        <version>3.1.0</version>
+        <scope>provided</scope>
+    </dependency>
+    
+    <!-- Mojarra JSF -->
+    <dependency>
+        <groupId>com.sun.faces</groupId>
+        <artifactId>jsf-api</artifactId>
+        <version>2.2.15</version>
+    </dependency>
+    <dependency>
+        <groupId>com.sun.faces</groupId>
+        <artifactId>jsf-impl</artifactId>
+        <version>2.2.15</version>
+    </dependency>
+    
+    <!-- PrimeFaces -->
+    <dependency>
+        <groupId>org.primefaces</groupId>
+        <artifactId>primefaces</artifactId>
+        <version>10.0.0</version>
+    </dependency>
+    
+    <!-- Hibernate Core -->
+    <dependency>
+        <groupId>org.hibernate</groupId>
+        <artifactId>hibernate-core</artifactId>
+        <version>5.5.7.Final</version>
+    </dependency>
+  
+    <!-- Hibernate Java 8 Support -->
+    <dependency>
+        <groupId>org.hibernate</groupId>
+        <artifactId>hibernate-java8</artifactId>
+        <version>5.5.7.Final</version>
+    </dependency>
+    
+      <dependency>
+	    <groupId>com.oracle.database.jdbc</groupId>
+	    <artifactId>ojdbc8</artifactId>
+	    <version>19.8.0.0</version>
+  	</dependency>
+    
+</dependencies>
+
+
+<build>
+      <plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-war-plugin</artifactId>
+            <version>${maven.compiler.plugin.version}</version>
+        </plugin>
+    </plugins>
+    
+    <finalName>check</finalName>
+  </build>
+</project>
