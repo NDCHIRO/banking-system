@@ -17,14 +17,14 @@ public class test {
 		SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
-		Client client = createClient("dina","saleh","salah@gmail");
-		Client client1 = createClient("mina","adel","mina@yahoo.com");
+		Client client = createClient("mohamed","saleh","salah@gmail");
+		Client client1 = createClient("ali ","adel","mina@yahoo.com");
 
 		BankEmployee employee = createBankEmployee();
 		Account fromAcc = createAccount(client);
 		Account toAcc = createAccount(client1);
 		Transaction transaction = createTransaction(client,fromAcc,toAcc);
-		boolean transfered = transaction.transfer(fromAcc, toAcc, 10);
+		boolean transfered = transaction.transfer(fromAcc, toAcc, 200);
 		System.out.println(transfered);
 		Bank bank = createBank(client,toAcc);
 		session.save(client);
@@ -43,7 +43,6 @@ public class test {
 		Client client = new Client();
 		client.setName(name);
 		client.setPassword(pass);
-		client.setConfirmPassword(pass);
 		client.setMail(mail);
 		client.setAddress(name+" 123456");
 		//client.setDate(new Date());
@@ -63,9 +62,9 @@ public class test {
 	public static Account createAccount(Client client)
 	{
 		Account account = new Account();
-		Random random = new Random();
-        int randomNumber = random.nextInt(901) + 100;
-		account.setAmount(500);
+		/*Random random = new Random();
+        int randomNumber = random.nextInt(901) + 100;*/
+		account.setAmount(700);
 		account.setClient(client);
 		return account;
 	}

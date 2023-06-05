@@ -17,14 +17,13 @@ public class Client {
 	private int id;
 	private String name;
 	private String password;
-	private String confirmPassword;
 	//private Date date;
 	private int netSalary;
 	private String address;
 	private String mobile;
 	private String mail;
 	
-	Client()
+	public Client()
 	{}
 	public int getId() {
 		return id;
@@ -40,12 +39,6 @@ public class Client {
 	}
 	public void setPassword(String password) {
 		this.password = password;
-	}
-	public String getConfirmPassword() {
-		return confirmPassword;
-	}
-	public void setConfirmPassword(String confirmPassword) {
-		this.confirmPassword = confirmPassword;
 	}
 	/*public Date getDate() {
 		return date;

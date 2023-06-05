@@ -4,24 +4,43 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:p="http://primefaces.org/ui">
 	<h:head>
-		<title>JSF - Myfaces Example</title>
+		<title>Banking System</title>
 	</h:head>
 	<h:body>
-	<h:form>
-    <div class="card">
-        <p:dataTable id="table" var="product" value="#{basicView.products}" >
-            <p:column headerText="Code">
-                <h:outputText value="#{product.code}" />
-            </p:column>
-
-            <p:column headerText="Name">
-                <h:outputText value="#{product.desc}" />
-            </p:column>
-			 <p:column headerText="Delete">
-                <p:commandButton value="delete" action="#{basicView.delete(product)}" update="table"/>
-            </p:column>
-        </p:dataTable>
-    </div>
-</h:form>
+		<h:form>
+    		<h2> Login page </h2>
+    		<p:growl id="growl" showDetail="true" />
+        	<p:growl id="growl-sticky" for="sticky-key" showDetail="true" sticky="true" />
+    		
+    		<h:outputText value="user name: " />    		
+    		<p:inputText  id="username" value = "#{signup.username}" minlength="5" required = "true"/>
+    		<br></br>
+    		<br></br>
+    		<h:outputText value="password: " />  
+    		<p:password id="password" value="#{signup.password}" required="true"/>
+			<h:message for="password" style="color: red" />    		
+			<br></br>
+    		<br></br>
+    		mobile number: <p:inputText id="number" value = "#{signup.mobileNumber}" required = "true"/>
+    		<br></br>
+    		<br></br>
+    		<h:outputText value="mail: " />  
+    		<p:inputText id="mail" value="#{signup.mail}" required="true"/>
+			<br></br>
+    		<br></br>
+    		<p:selectOneMenu id="option" value="#{signup.selectedOption}">
+                    <f:selectItem itemLabel="bank employee" itemValue="bank employee"/>
+                    <f:selectItem itemLabel="client" itemValue="client"/>
+                    <f:facet name="footer">
+                        <p:divider styleClass="mt-0" />
+                        <h:outputText value="2 options" style="font-weight:bold;"/>
+                    </f:facet>
+             </p:selectOneMenu>
+             <br></br>
+    		<br></br>
+    		<p:commandButton value="Submit" action="#{signup.submit()}" update="growl" 
+    		 styleClass="mr-2" style="width: 10rem"  />
+    		
+		</h:form>
 	</h:body>
 </html>
