@@ -1,34 +1,32 @@
-package pilot.primefaces;
+package ORMs;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
 @Entity
-@Table(name="bank")
-public class Bank {
+@Table(name="Account")
+public class Account {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	@OneToOne
+	private int amount;
+	@OneToOne		
 	private Client client;
-	@OneToOne
-	private Account account;
-	private String address;
-	
-	public Bank()
-	{
-
-	}
-	
 	public int getId() {
 		return id;
 	}
 	public void setId(int id) {
 		this.id = id;
+	}
+	public int getAmount() {
+		return amount;
+	}
+	public void setAmount(int amount) {
+		this.amount = amount;
 	}
 	public Client getClient() {
 		return client;
@@ -36,19 +34,6 @@ public class Bank {
 	public void setClient(Client client) {
 		this.client = client;
 	}
-	public Account getAccount() {
-		return account;
-	}
-	public void setAccount(Account account) {
-		this.account = account;
-	}
-	public String getAddress() {
-		return address;
-	}
-	public void setAddress(String address) {
-		this.address = address;
-	}
-	
 	
 	
 }

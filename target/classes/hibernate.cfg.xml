@@ -18,12 +18,12 @@
 		<property name="hibernate.hbm2ddl.auto">update</property>
 		<property name="hibernate.cache.region_perfix">hibernate.test</property>
 		
-		<mapping class="pilot.primefaces.User"/>
-		<mapping class="pilot.primefaces.Client"/>
-		<mapping class="pilot.primefaces.BankEmployee"/>
-		<mapping class="pilot.primefaces.Account"/>
-		<mapping class="pilot.primefaces.Transaction"/> 
-		<mapping class="pilot.primefaces.Bank"/> 
+		<mapping class="ORMs.User"/>
+		<mapping class="ORMs.Client"/>
+		<mapping class="ORMs.BankEmployee"/>
+		<mapping class="ORMs.Account"/>
+		<mapping class="ORMs.Transaction"/> 
+		<mapping class="ORMs.Bank"/> 
 	
 	</session-factory>
 </hibernate-configuration>

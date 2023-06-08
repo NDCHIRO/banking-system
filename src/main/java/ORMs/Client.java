@@ -1,4 +1,4 @@
-package pilot.primefaces;
+package ORMs;
 
 import java.util.Date;
 
@@ -22,7 +22,7 @@ public class Client {
 	private String address;
 	private String mobile;
 	private String mail;
-	
+	private String role;
 	public Client()
 	{}
 	public int getId() {
@@ -69,6 +69,12 @@ public class Client {
 	}
 	public void setMail(String mail) {
 		this.mail = mail;
+	}
+	public String getRole() {
+		return role;
+	}
+	public void setRole(String role) {
+		this.role = role;
 	}
 
 }

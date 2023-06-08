@@ -1,4 +1,4 @@
-package pilot.primefaces;
+package ORMs;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

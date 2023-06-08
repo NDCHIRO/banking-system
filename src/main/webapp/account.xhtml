@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+	<h:head>
+		Account page
+	</h:head>
+	<h:body>
+		<h:form>
+			<h2> #{msg.message_signUp} </h2>
+    		<p:growl id="growl" showDetail="true" />
+        	<p:growl id="growl-sticky" for="sticky-key" showDetail="true" sticky="true" />
+        	<br></br>
+    		#{msg.message_mobileNumber} <p:inputText id="number" value = "#{signup.mobileNumber}" />
+    		<br></br>
+    		<br></br>
+    		<h:outputText value="#{msg.message_mail} " />  
+    		<p:inputText id="mail" value="#{signup.mail}" />
+			<br></br>
+    		<br></br>
+    		Address: <p:inputText id="address"  placeholder="hello"/>
+    		<br></br>
+    		<br></br>
+    		<p:commandButton action="#{account.submit()}" value="change" update="growl" />
+    		
+    		
+		</h:form>
+	</h:body>
+</html>
+		

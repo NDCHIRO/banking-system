@@ -1,40 +1,94 @@
 package Beans;
 
+import java.util.LinkedHashMap;
+import java.util.Locale;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ValueChangeEvent;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-import pilot.primefaces.Client;
+import BeansUtility.MessagesNotification;
+import ORMs.Client;
+import Services.SignUpService;
 
 @ManagedBean(name = "signup")
-@SessionScoped
+@ViewScoped
 public class SignupBean {
 	private String username;
 	private String password;
-	private boolean isEmployee=false;
 	private String mobileNumber;
 	private String mail;
 	private String selectedOption;
+	private String languageCode;
+	private static Map<String,Object> countries;
+	
+	static {
+		countries = new LinkedHashMap<String,Object>();
+		countries.put("English", Locale.ENGLISH);
+		countries.put("Arabic", new Locale("ar","EG"));
+	}
+
+	public SignupBean() {
+		
+	}
+	
+	public void countryLocaleCodeChanged(ValueChangeEvent take_event)
+	{
+			String new_language_code = take_event.getNewValue().toString();
+	        for (Map.Entry<String, Object> entry : countries.entrySet()) 
+	        {
+	        	   if(entry.getValue().toString().equals(new_language_code))
+	        	   {
+	        		    FacesContext.getCurrentInstance()
+	        			.getViewRoot().setLocale((Locale)entry.getValue());
+	        	   }
+	          }
+	}
+	
+
+	public void submit()
+	{
+		try {
+			SignUpService.saveClientData(createClient());
+			MessagesNotification.showDoneMessage("Done","data are saved to the database");
+		}
+		catch(Exception e)
+		{
+			MessagesNotification.showErrorMessage("Registration Failed",e.getMessage());
+		}
+	}
 	
 	
-	public String getSelectedOption() {
+	
+	public Client createClient()
+	{
+		Client client = new Client();
+		client.setName(username);
+		client.setPassword(password);
+		client.setMobile(mobileNumber);
+		client.setMail(mail);
+		client.setRole(selectedOption);
+		System.out.println("done");
+		return client;
+	}
+	
+ 
+	 public String getSelectedOption() {
 		return selectedOption;
 	}
 
 	public void setSelectedOption(String selectedOption) {
 		this.selectedOption = selectedOption;
-	}
-
-	public SignupBean() {
-		
 	}
 	
 	public String getMail() {
@@ -51,12 +105,6 @@ public class SignupBean {
 	public void setMobileNumber(String mobileNumber) {
 		this.mobileNumber = mobileNumber;
 	}
-	public boolean isEmployee() {
-		return isEmployee;
-	}
-	public void setEmployee(boolean isEmployee) {
-		this.isEmployee = isEmployee;
-	}
 	public String getUsername() {
 		return username;
 	}
@@ -70,56 +118,22 @@ public class SignupBean {
 		this.password = password;
 	}
 	
-	public void submit()
-	{
-		boolean isPassword;
-	   if( password.matches("(?=^.{8,}$)(?=.*\\d)(?=.*[!@#$%^&*_]+)(?![.\\n])(?=.*[A-Z])(?=.*[a-z]).*$"))
-		   isPassword=true;
-	   else
-		   isPassword=false;	
-	   String regex = "^[A-Za-z0-9+_.-]+@+[A-Za-z0-9+_.-]+(.+)$";
-	   boolean isEmail;
-	   Pattern pattern = Pattern.compile(regex);
-	   Matcher matcher = pattern.matcher(mail);
-	   if(matcher.matches())
-			isEmail=true;
-	   else
-		   isEmail=false;	
-	   
-	   if(isPassword && isEmail)
-	   {
-		   Client client= new Client();
-		   client.setName(username);
-		   client.setPassword(password);
-		   client.setMobile(mobileNumber);
-		   client.setMail(mail);
-		   client.setAddress(selectedOption);
-		   System.out.println("done");
-		   save(client);
-		   done();
-	   }
-		  
+	public String getLanguageCode() {
+		return languageCode;
 	}
-	public void save(Client client)
-	{
-		//create a service
-		SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
-		Session session = sessionFactory.openSession();
-		session.beginTransaction();
-		session.save(client);
-		session.getTransaction().commit();
-		session.close();
-	}
-	
-	public void addMessage(FacesMessage.Severity severity, String summary, String detail) {
-        FacesContext.getCurrentInstance().
-                addMessage(null, new FacesMessage(severity, summary, detail));
-    }
 
-    public void done() {
-        addMessage(FacesMessage.SEVERITY_INFO, "Done", "data is saved");
-    }
+	public void setLanguageCode(String languageCode) {
+		this.languageCode = languageCode;
+	}
+
+	public  Map<String, Object> getCountries() {
+		return countries;
+	}
+
+	public  void setCountries(Map<String, Object> countries) {
+		SignupBean.countries = countries;
+	}
 	
-	//growl
 	
+
 }

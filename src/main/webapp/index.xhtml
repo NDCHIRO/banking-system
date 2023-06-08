@@ -8,29 +8,39 @@
 	</h:head>
 	<h:body>
 		<h:form>
-    		<h2> Login page </h2>
+    		<h2> #{msg.message_signUp} </h2>
     		<p:growl id="growl" showDetail="true" />
         	<p:growl id="growl-sticky" for="sticky-key" showDetail="true" sticky="true" />
-    		
-    		<h:outputText value="user name: " />    		
-    		<p:inputText  id="username" value = "#{signup.username}" minlength="5" required = "true"/>
+        	<br></br>
+    		<p:selectOneMenu id="languages" value="#{signup.languageCode}"
+    		 onchange="submit()" valueChangeListener="#{signup.countryLocaleCodeChanged}">
+                    <f:selectItems value="#{signup.countries}"></f:selectItems>
+             </p:selectOneMenu>
+             <br></br>
+    		<h:outputText value="#{msg.message_username} " />    		
+    		<p:inputText  id="username" value = "#{signup.username}" 
+    		required="true" requiredMessage="please enter the name">
+    		<h:message for="username" style="color: red" />   
+    		</p:inputText>
     		<br></br>
     		<br></br>
-    		<h:outputText value="password: " />  
-    		<p:password id="password" value="#{signup.password}" required="true"/>
-			<h:message for="password" style="color: red" />    		
+    		<h:outputText value="#{msg.message_password} "/>  
+    		<p:password id="password" value="#{signup.password}" required="true"
+    		requiredMessage="please enter the password"/>		
 			<br></br>
     		<br></br>
-    		mobile number: <p:inputText id="number" value = "#{signup.mobileNumber}" required = "true"/>
+    		#{msg.message_mobileNumber} <p:inputText id="number" value = "#{signup.mobileNumber}" 
+    		required = "true" requiredMessage="please enter the mobile number"/>
     		<br></br>
     		<br></br>
-    		<h:outputText value="mail: " />  
-    		<p:inputText id="mail" value="#{signup.mail}" required="true"/>
+    		<h:outputText value="#{msg.message_mail} " />  
+    		<p:inputText id="mail" value="#{signup.mail}" required="true"
+    		 requiredMessage="please enter the mail"/>
 			<br></br>
     		<br></br>
     		<p:selectOneMenu id="option" value="#{signup.selectedOption}">
-                    <f:selectItem itemLabel="bank employee" itemValue="bank employee"/>
-                    <f:selectItem itemLabel="client" itemValue="client"/>
+                    <f:selectItem itemLabel="#{msg.message_bankEmployee}" itemValue="bank employee"/>
+                    <f:selectItem itemLabel="#{msg.message_client}" itemValue="client"/>
                     <f:facet name="footer">
                         <p:divider styleClass="mt-0" />
                         <h:outputText value="2 options" style="font-weight:bold;"/>
@@ -38,7 +48,7 @@
              </p:selectOneMenu>
              <br></br>
     		<br></br>
-    		<p:commandButton value="Submit" action="#{signup.submit()}" update="growl" 
+    		<p:commandButton value="#{msg.message_submit}" action="#{signup.submit()}" update="growl" 
     		 styleClass="mr-2" style="width: 10rem"  />
     		
 		</h:form>

@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+	<h:head>
+		<h3>Banking System</h3>
+	</h:head>
+
+	<body>
+		<h:form>
+				<p:growl id="growl" showDetail="true" />
+        		<p:growl id="growl-sticky" for="sticky-key" showDetail="true" sticky="true" />
+				<h:outputText value="#{msg.message_username} " />    		
+	    		<p:inputText  id="username" value = "#{signin.username}" required="true">
+	    		</p:inputText>
+	    		<br></br>
+	    		<br></br>
+	    		<h:outputText value="#{msg.message_password} "/>  
+	    		<p:password id="password" value="#{signin.password}" required="true"/>		
+				<br></br>
+	    		<br></br>
+				<p:commandButton action="#{signin.submit()}" value="login" update="growl" />
+			</h:form>
+	</body>
+</html>
