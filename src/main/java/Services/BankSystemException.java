@@ -1,5 +1,7 @@
 package Services;
 
+import BeansUtility.MessagesNotification;
+
 public class BankSystemException extends Exception{
 
 	public BankSystemException() {

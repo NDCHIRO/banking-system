@@ -16,6 +16,11 @@ public class Account {
 	private int amount;
 	@OneToOne		
 	private Client client;
+	
+	public Account() {
+		// TODO Auto-generated constructor stub
+	}
+	
 	public int getId() {
 		return id;
 	}

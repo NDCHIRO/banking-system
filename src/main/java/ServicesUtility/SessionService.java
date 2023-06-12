@@ -8,24 +8,24 @@ import Services.SessionFactorySingletonPattern;
 
 public class SessionService {
 	
-	public static Session startSession()  throws BankSystemException
+	public static Session startSession()  throws Exception
 	{
 		try {
-		SessionFactory sessionFactory = SessionFactorySingletonPattern.getSessionFactory();
-		Session session = sessionFactory.openSession();
-		session.beginTransaction();
-		return session;
+			SessionFactory sessionFactory = SessionFactorySingletonPattern.getSessionFactory();
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			return session;
 		}
 		catch(Exception e)
 		{
 			throw new BankSystemException();
 		}
 	}
-	public static void endSession(Session session)	throws BankSystemException
+	public static void endSession(Session session) throws Exception	
 	{
 		try {
-		session.getTransaction().commit();
-		session.close();
+			session.getTransaction().commit();
+			session.close();
 		}
 		catch(Exception e)
 		{

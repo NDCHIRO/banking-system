@@ -8,23 +8,57 @@
 	</h:head>
 	<h:body>
 		<h:form>
-			<h2> #{msg.message_signUp} </h2>
+			<h2> Account page </h2>
     		<p:growl id="growl" showDetail="true" />
         	<p:growl id="growl-sticky" for="sticky-key" showDetail="true" sticky="true" />
         	<br></br>
-    		#{msg.message_mobileNumber} <p:inputText id="number" value = "#{signup.mobileNumber}" />
+    		#{msg.message_mobileNumber} <p:inputText id="number" value = "#{account.mobileNumber}" />
     		<br></br>
     		<br></br>
     		<h:outputText value="#{msg.message_mail} " />  
-    		<p:inputText id="mail" value="#{signup.mail}" />
+    		<p:inputText id="mail" value="#{account.mail}" />
 			<br></br>
     		<br></br>
-    		Address: <p:inputText id="address"  placeholder="hello"/>
+    		Address: <p:inputText id="address"  value="#{account.address}"/>
     		<br></br>
     		<br></br>
-    		<p:commandButton action="#{account.submit()}" value="change" update="growl" />
     		
+    		<h:outputText value="amount of money you have: " />  
+    		<p:inputText id="money" value="#{account.amountOfMoney}" required="true"
+    		 requiredMessage="please enter your amount Of Money"/>
+			<br></br>
+    		<br></br>
+    		<p:commandButton action="#{account.submit()}" value="edit" update="growl" />
+    		<br></br>
+    		<br></br>
+    		<h:outputText value="Transfer money:" />  
+    		<br></br>
+    		<h:outputText value="username: " />  
+    		<p:inputText value="#{account.transferedUsername}" />
+    		<h:outputText value="     amount of money: " />  
+    		<p:inputText value="#{account.transferedMoney}" />
+			<br></br>
+    		<br></br>
+    		<p:commandButton action="#{account.transferMoney()}" value="transfer money" update="growl"/>
+    		<br></br>
+    		<br></br>
     		
+			 <p:dialog  header="Table Dialog" widgetVar="tableDialog" modal="true" resizable="false">
+			  <p:dataTable value="#{account.showTransactions()}" var="item">
+			    <p:column headerText="first account">
+			      <h:outputText value="#{item.getFromAccount().getClient().getName()}" />
+			    </p:column>
+			    <p:column headerText="second account">
+			      <h:outputText value="#{item.getToAccount().getClient().getName()}" />
+			    </p:column>
+			    <p:column headerText="status">
+			      <h:outputText value="#{item.getClient().getId()}" />
+			    </p:column>
+		
+			  </p:dataTable>
+			</p:dialog> 
+
+			<p:commandButton value="Open Dialog" onclick="PF('tableDialog').show()" />  
 		</h:form>
 	</h:body>
 </html>

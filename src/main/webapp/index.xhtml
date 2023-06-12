@@ -19,24 +19,29 @@
              <br></br>
     		<h:outputText value="#{msg.message_username} " />    		
     		<p:inputText  id="username" value = "#{signup.username}" 
-    		required="true" requiredMessage="please enter the name">
+    		 requiredMessage="please enter the name">
     		<h:message for="username" style="color: red" />   
     		</p:inputText>
     		<br></br>
     		<br></br>
     		<h:outputText value="#{msg.message_password} "/>  
-    		<p:password id="password" value="#{signup.password}" required="true"
+    		<p:password id="password" value="#{signup.password}" 
     		requiredMessage="please enter the password"/>		
 			<br></br>
     		<br></br>
     		#{msg.message_mobileNumber} <p:inputText id="number" value = "#{signup.mobileNumber}" 
-    		required = "true" requiredMessage="please enter the mobile number"/>
+    		requiredMessage="please enter the mobile number"/>
     		<br></br>
     		<br></br>
     		<h:outputText value="#{msg.message_mail} " />  
-    		<p:inputText id="mail" value="#{signup.mail}" required="true"
+    		<p:inputText id="mail" value="#{signup.mail}" 
     		 requiredMessage="please enter the mail"/>
 			<br></br>
+    		<br></br>
+    		<h:outputText value="#{msg.message_netSalary} " />  
+    		<p:inputText id="salary" value="#{signup.salary}" 
+    		 requiredMessage="please enter your salary"/>
+    		 <br></br>
     		<br></br>
     		<p:selectOneMenu id="option" value="#{signup.selectedOption}">
                     <f:selectItem itemLabel="#{msg.message_bankEmployee}" itemValue="bank employee"/>
@@ -48,9 +53,14 @@
              </p:selectOneMenu>
              <br></br>
     		<br></br>
-    		<p:commandButton value="#{msg.message_submit}" action="#{signup.submit()}" update="growl" 
-    		 styleClass="mr-2" style="width: 10rem"  />
-    		
+    		<p:commandButton value="#{msg.message_submit}"  action="#{signup.submit()}" update="growl" 
+    		 	styleClass="mr-2" style="width: 10rem"  >
+    		 </p:commandButton>
+    		 <br></br>
+    		<br></br>
+    		<p:commandButton value="sign in"  action="#{signup.goToSignIn()}" update="growl" 
+    		 	styleClass="mr-2" style="width: 10rem"  >
+    		 </p:commandButton>
 		</h:form>
 	</h:body>
 </html>

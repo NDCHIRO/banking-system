@@ -57,17 +57,4 @@ public class Transaction {
 		this.toAccount = toAccount;
 	}
 	
-	public boolean transfer(Account senderAcc, Account recieverAcc,int value)
-	{
-		if(senderAcc.getAmount() >= value)
-		{
-			senderAcc.setAmount(senderAcc.getAmount()-value);
-			recieverAcc.setAmount(recieverAcc.getAmount()+value);
-			return true;
-		}
-		return false;
-		
-	}
-	
-	
 }

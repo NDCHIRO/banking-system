@@ -6,6 +6,7 @@ import javax.faces.context.FacesContext;
 public class MessagesNotification {
 	public static void showDoneMessage(String header, String body) {
         addMessage(FacesMessage.SEVERITY_INFO, header, body);
+
     }
     
     public static void showErrorMessage(String header, String body)

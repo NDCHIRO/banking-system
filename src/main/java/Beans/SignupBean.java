@@ -1,23 +1,35 @@
 package Beans;
 
+import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
+import javax.faces.application.ViewHandler;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.faces.FacesException;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.html.HtmlInputText;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
+import javax.faces.view.facelets.ValidatorHandler;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
+
 import BeansUtility.MessagesNotification;
+import ORMs.Account;
 import ORMs.Client;
 import Services.SignUpService;
 
@@ -28,6 +40,7 @@ public class SignupBean {
 	private String password;
 	private String mobileNumber;
 	private String mail;
+	private int salary;
 	private String selectedOption;
 	private String languageCode;
 	private static Map<String,Object> countries;
@@ -56,20 +69,36 @@ public class SignupBean {
 	}
 	
 
-	public void submit()
+	public String submit()
 	{
+		String page="";
 		try {
 			SignUpService.saveClientData(createClient());
-			MessagesNotification.showDoneMessage("Done","data are saved to the database");
+			MessagesNotification.showDoneMessage("Done","data is saved to the database");
+			//Thread.sleep(2000);
+			UIViewRoot view = FacesContext.getCurrentInstance().getViewRoot();
+			page = view.getViewId() + "?faces-redirect=true";
+			return page; 
 		}
 		catch(Exception e)
 		{
 			MessagesNotification.showErrorMessage("Registration Failed",e.getMessage());
 		}
+		return page;
 	}
 	
-	
-	
+	public String goToSignIn()
+	{
+		String page="";
+		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+	    try {
+	        externalContext.redirect(externalContext.getRequestContextPath() + "/signIn.xhtml");
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	        // Handle the exception if necessary
+	    }
+	    return page;
+	}
 	public Client createClient()
 	{
 		Client client = new Client();
@@ -78,7 +107,7 @@ public class SignupBean {
 		client.setMobile(mobileNumber);
 		client.setMail(mail);
 		client.setRole(selectedOption);
-		System.out.println("done");
+		client.setNetSalary(salary);
 		return client;
 	}
 	
@@ -133,7 +162,14 @@ public class SignupBean {
 	public  void setCountries(Map<String, Object> countries) {
 		SignupBean.countries = countries;
 	}
-	
-	
+
+	public int getSalary() {
+		return salary;
+	}
+
+	public void setSalary(int salary) {
+		this.salary = salary;
+	}
+
 
 }

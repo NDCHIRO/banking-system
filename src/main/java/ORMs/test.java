@@ -24,8 +24,8 @@ public class test {
 		Account fromAcc = createAccount(client);
 		Account toAcc = createAccount(client1);
 		Transaction transaction = createTransaction(client,fromAcc,toAcc);
-		boolean transfered = transaction.transfer(fromAcc, toAcc, 200);
-		System.out.println(transfered);
+		//boolean transfered = transaction.transfer(fromAcc, toAcc, 200);
+		//System.out.println(transfered);
 		Bank bank = createBank(client,toAcc);
 		session.save(client);
 		session.save(client1);

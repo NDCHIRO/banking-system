@@ -23,7 +23,7 @@ public class SignInBean implements Serializable {
 	private String username;
 	private String password;
 	//returns the page name to the view (xhtml)
-	public String submit() {
+	public String submit() throws Exception {
 		String page="";
 		try {
 		page=SignInService.checkSignInData(username,password);
