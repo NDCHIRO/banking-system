@@ -6,9 +6,10 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
 import ORMs.Client;
+import ServicesUtility.BankSystemException;
 
 public class ClientLogin {
-	public static Client getClient()	
+	public static Client getClient() throws BankSystemException
 	{
 		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
 		Map<String, Object> sessionMap = externalContext.getSessionMap();
@@ -16,7 +17,7 @@ public class ClientLogin {
 		return client;
 	}
 	
-	public static void setClient(String s,Client client)
+	public static void setClient(String s,Client client) throws BankSystemException
 	{
 		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
 	    Map<String, Object> sessionMap = externalContext.getSessionMap();

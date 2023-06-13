@@ -25,13 +25,16 @@ import javax.faces.view.facelets.ValidatorHandler;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.annotations.common.util.impl.Log;
 import org.hibernate.cfg.Configuration;
 
 
+import BeansUtility.ExceptionLogger;
 import BeansUtility.MessagesNotification;
 import ORMs.Account;
 import ORMs.Client;
 import Services.SignUpService;
+import ServicesUtility.BankSystemException;
 
 @ManagedBean(name = "signup")
 @ViewScoped
@@ -72,17 +75,22 @@ public class SignupBean {
 	public String submit()
 	{
 		String page="";
-		try {
+		try 
+		{
 			SignUpService.saveClientData(createClient());
 			MessagesNotification.showDoneMessage("Done","data is saved to the database");
-			//Thread.sleep(2000);
 			UIViewRoot view = FacesContext.getCurrentInstance().getViewRoot();
 			page = view.getViewId() + "?faces-redirect=true";
 			return page; 
 		}
-		catch(Exception e)
+		catch(BankSystemException e)
 		{
 			MessagesNotification.showErrorMessage("Registration Failed",e.getMessage());
+		}
+		catch(Exception e)
+		{
+	        ExceptionLogger.logException(e);
+			MessagesNotification.showErrorMessage("Registration Failed",new BankSystemException().getMessage());
 		}
 		return page;
 	}
@@ -93,9 +101,10 @@ public class SignupBean {
 		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
 	    try {
 	        externalContext.redirect(externalContext.getRequestContextPath() + "/signIn.xhtml");
-	    } catch (IOException e) {
-	        e.printStackTrace();
-	        // Handle the exception if necessary
+	    } catch (Exception e) {
+	    	ExceptionLogger.logException(e);
+			MessagesNotification.showErrorMessage("page Failed to load",new BankSystemException().getMessage());
+
 	    }
 	    return page;
 	}

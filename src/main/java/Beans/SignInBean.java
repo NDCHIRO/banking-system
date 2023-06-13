@@ -6,11 +6,12 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 
+import BeansUtility.ExceptionLogger;
 import BeansUtility.MessagesNotification;
 import ORMs.Client;
-import Services.BankSystemException;
 import Services.SignInService;
 import Services.SignUpService;
+import ServicesUtility.BankSystemException;
 
 
 @ManagedBean(name="signin")
@@ -23,15 +24,23 @@ public class SignInBean implements Serializable {
 	private String username;
 	private String password;
 	//returns the page name to the view (xhtml)
-	public String submit() throws Exception {
+	
+	public String submit() throws BankSystemException 
+	{
 		String page="";
-		try {
-		page=SignInService.checkSignInData(username,password);
-		MessagesNotification.showDoneMessage("login successfully","Welcome "+username);
+		try 
+		{
+			page=SignInService.checkSignInData(username,password);
+			MessagesNotification.showDoneMessage("login successfully","Welcome "+username);
 		}
 		catch(BankSystemException e)
 		{
-			MessagesNotification.showErrorMessage("login failed",e.getMessage());
+			MessagesNotification.showErrorMessage("login failed try again",e.getMessage());
+		}
+		catch(Exception e)
+		{
+			ExceptionLogger.logException(e);
+			MessagesNotification.showErrorMessage("login failed",new BankSystemException().getMessage());
 		}
 		return page;
 	}

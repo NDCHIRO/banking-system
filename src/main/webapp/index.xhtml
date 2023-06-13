@@ -44,8 +44,8 @@
     		 <br></br>
     		<br></br>
     		<p:selectOneMenu id="option" value="#{signup.selectedOption}">
-                    <f:selectItem itemLabel="#{msg.message_bankEmployee}" itemValue="bank employee"/>
                     <f:selectItem itemLabel="#{msg.message_client}" itemValue="client"/>
+                    <f:selectItem itemLabel="#{msg.message_bankEmployee}" itemValue="bank employee"/>
                     <f:facet name="footer">
                         <p:divider styleClass="mt-0" />
                         <h:outputText value="2 options" style="font-weight:bold;"/>
@@ -58,9 +58,9 @@
     		 </p:commandButton>
     		 <br></br>
     		<br></br>
-    		<p:commandButton value="sign in"  action="#{signup.goToSignIn()}" update="growl" 
+    		<p:commandButton value="go to sign in"  action="#{signup.goToSignIn()}" update="growl" 
     		 	styleClass="mr-2" style="width: 10rem"  >
-    		 </p:commandButton>
+    		</p:commandButton>
 		</h:form>
 	</h:body>
 </html>

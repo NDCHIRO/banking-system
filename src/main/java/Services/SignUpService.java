@@ -17,6 +17,7 @@ import BeansUtility.MessagesNotification;
 import ORMs.Account;
 import ORMs.Client;
 import ServicesUtility.TablesSearch;
+import ServicesUtility.BankSystemException;
 import ServicesUtility.SessionService;
 
 public class SignUpService {
@@ -25,12 +26,13 @@ public class SignUpService {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public static void saveClientData(Client client) throws Exception
+	public static void saveClientData(Client client) throws BankSystemException
 	{
 		checkUserName(client.getName());
 		checkValidPassword(client.getPassword());
 		checkValidMail(client.getMail());
-		Session session = SessionService.startSession();
+		Session session;
+		session = SessionService.startSession();
 		if(TablesSearch.searchForClient(session,client.getName(),client.getPassword()) == true)
 		{
 			SessionService.endSession(session);
@@ -41,12 +43,13 @@ public class SignUpService {
 		session.save(account);
 		SessionService.endSession(session);
 	}
-
+		
 	public static void checkUserName(String username) throws BankSystemException
 	{
 		if(username.length()<5 || username.length()>10)
 			throw new BankSystemException("username must be in range of 5 to 10");
 	}
+	
 	public static void checkValidPassword(String password)	throws BankSystemException
 	{
 		String regex = "(?=^.{8,}$)(?=.*\\d)(?=.*[!@#$%^&*_]+)(?![.\\n])(?=.*[A-Z])(?=.*[a-z]).*$";
@@ -64,19 +67,6 @@ public class SignUpService {
 		if(!matcher.matches())
 			throw new BankSystemException("Mail is not valid");
 	}
-	
-	public static boolean checkClientExists(Session session, Client givenClient)
-	{
-		String hql = "FROM Client";
-		Query<Client> query = session.createQuery(hql,Client.class);
-		List<Client> clients = query.getResultList();
-		for (Client client : clients) 
-		    if((client.getName().equals(givenClient.getName())))
-		    	return true;
-		return false;
-	}
-	
-	
 
 	public static Account createAccount(Client client)
 	{

@@ -15,6 +15,7 @@ import ORMs.Account;
 import ORMs.Client;
 import ORMs.Transaction;
 import ServicesUtility.TablesSearch;
+import ServicesUtility.BankSystemException;
 import ServicesUtility.SessionService;
 
 public class AccountService {
@@ -22,69 +23,42 @@ public class AccountService {
 	
 	//module dialiag for transaction
 
-	public static void editClientDataAndAccount(String address,String mail,String mobileNumber, int amountOfMoney) throws Exception
+	public static void editClientDataAndAccount(String address,String mail,String mobileNumber, int amountOfMoney)  throws BankSystemException
 	{
-		try 
-		{
-			Session session = SessionService.startSession();
-			Client client = session.get(Client.class,ClientLogin.getClient().getId());
-			client.setAddress(address);
-			client.setMail(mail);
-			client.setMobile(mobileNumber);
-			Account account = session.get(Account.class,getAccount(session,client.getId() ).getId());
-			account.setAmount(amountOfMoney);
-			session.update(client);
-			session.update(account);
-			SessionService.endSession(session);
-			//put it in the bean
-			MessagesNotification.showDoneMessage("data edited successfully", "Done");
-		}
-		catch(Exception e)
-		{
-			MessagesNotification.showErrorMessage("edit failed","please try to edit data later");
-			throw new BankSystemException();
-		}
+		Session session = SessionService.startSession();
+		Client client = session.get(Client.class,ClientLogin.getClient().getId());
+		if(client == null)
+			throw new BankSystemException("client data not found");
+		client.setAddress(address);
+		client.setMail(mail);
+		client.setMobile(mobileNumber);
+		Account account = session.get(Account.class,getAccount(session,client.getId() ).getId());
+		account.setAmount(amountOfMoney);
+		session.update(client);
+		session.update(account);
+		SessionService.endSession(session);		
 	}
 	
-	public static Account getAccount(Session session, int clientId) throws Exception
+	public static Account getAccount(Session session, int clientId) throws BankSystemException
 	{
 		Account account =TablesSearch.searchForAccount(session, clientId);
 		if(account==null)
-		{
-			//put it in the bean
-
-			MessagesNotification.showErrorMessage("edit failed","please try to edit data later");
-			throw new BankSystemException();
-		}
+			throw new BankSystemException("account not found");
 		return account;
 	}
 	
-	/*public static Client getClient()	
-	{
-		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-		Map<String, Object> sessionMap = externalContext.getSessionMap();
-		Client client =  (Client) sessionMap.get("client");
-		return client;
-	}*/
 	
-	public static List<Transaction> getAllTransactions() throws Exception
+	public static List<Transaction> getAllTransactions() throws BankSystemException
 	{
 		List<Transaction> transactions;
-		try {
-			Session session = SessionService.startSession();
-			 transactions=TablesSearch.getAllTransaction(session);
-			SessionService.endSession(session);
-		}
-		catch(Exception e)
-		{
-			throw new BankSystemException();
-		}
-		return transactions;
-		    
+		Session session = SessionService.startSession();
+		 transactions=TablesSearch.getAllTransaction(session);
+		SessionService.endSession(session);
+		return transactions;   
 	}
 	
 	
-	public static void transferMoney(int amountOfMoney,String transferedUsername) throws Exception
+	public static void transferMoney(int amountOfMoney,String transferedUsername) throws BankSystemException
 	{
 		Session session;
 		session = SessionService.startSession();
@@ -94,7 +68,7 @@ public class AccountService {
 		if(fromClient==null || toClient==null)
 		{
 			SessionService.endSession(session);
-			throw new BankSystemException("the given name does not exist");
+			throw new BankSystemException("the client does not exist");
 		}
 		Account fromAccount = session.get(Account.class,getAccount(session,fromClient.getId() ).getId() );
 		Account toAccount = session.get(Account.class,getAccount(session, toClient.getId() ).getId() );
@@ -109,20 +83,29 @@ public class AccountService {
 			SessionService.endSession(session);
 			throw new BankSystemException("the amount of Money is more than you");		
 		}
+		
 		fromAccount.setAmount(fromAccount.getAmount()-amountOfMoney);
 		toAccount.setAmount(toAccount.getAmount()+amountOfMoney);
-		Transaction transaction = new Transaction();
-		transaction.setFromAccount(fromAccount);
-		transaction.setToAccount(toAccount);
-		transaction.setClient(fromClient);
+		
+		Transaction transaction = createTransaction(fromAccount,toAccount,fromClient);
 		
 		session.update(fromAccount);
 		session.update(toAccount);
 		session.save(transaction);
-		//session.update(clientMoneyToBeSent);
+		
 		SessionService.endSession(session);
 		System.out.println("money sent");
-		MessagesNotification.showDoneMessage("Done", "Money sent to "+toClient.getName());
+	}
+	
+	
+	public static Transaction createTransaction(Account fromAccount,Account toAccount,Client fromClient)
+	{
+		Transaction transaction = new Transaction();
+		transaction.setFromAccount(fromAccount);
+		transaction.setToAccount(toAccount);
+		transaction.setClient(fromClient);
+		transaction.setDescription("pending");
+		return transaction;
 	}
 	
 	

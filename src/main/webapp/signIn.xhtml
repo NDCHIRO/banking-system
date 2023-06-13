@@ -10,18 +10,18 @@
 
 	<body>
 		<h:form>
-				<p:growl id="growl" showDetail="true" />
-        		<p:growl id="growl-sticky" for="sticky-key" showDetail="true" sticky="true" />
-				<h:outputText value="#{msg.message_username} " />    		
-	    		<p:inputText  id="username" value = "#{signin.username}" required="true">
-	    		</p:inputText>
-	    		<br></br>
-	    		<br></br>
-	    		<h:outputText value="#{msg.message_password} "/>  
-	    		<p:password id="password" value="#{signin.password}" required="true"/>		
-				<br></br>
-	    		<br></br>
-				<p:commandButton action="#{signin.submit()}" value="login" update="growl" />
-			</h:form>
+			<p:growl id="growl" showDetail="true" />
+       		<p:growl id="growl-sticky" for="sticky-key" showDetail="true" sticky="true" />
+			<h:outputText value="#{msg.message_username} " />    		
+    		<p:inputText  id="username" value = "#{signin.username}" >
+    		</p:inputText>
+    		<br></br>
+    		<br></br>
+    		<h:outputText value="#{msg.message_password} "/>  
+    		<p:password id="password" value="#{signin.password}" />		
+			<br></br>
+    		<br></br>
+			<p:commandButton action="#{signin.submit()}" value="login" update="growl" />
+		</h:form>
 	</body>
 </html>

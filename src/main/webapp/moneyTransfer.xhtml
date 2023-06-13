@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+      <h:head>
+		Money Transaction page
+	</h:head>
+	<h:body>
+
+	<h:form>
+			<p:growl id="growl" showDetail="true" />
+        	<p:growl id="growl-sticky" for="sticky-key" showDetail="true" sticky="true" />
+        	<br></br>
+        	<h:outputText value="Trsansfer money " />
+        	<br></br>
+			        	<br></br>
+			
+        	<h:outputText value="username: " />  
+    		<p:inputText value="#{account.transferedUsername}" />
+    		<h:outputText value="     amount of money: " />  
+    		<p:inputText value="#{account.transferedMoney}" />
+			<br></br>
+    		<br></br>
+    		<p:commandButton action="#{account.transferMoney()}" value="transfer money" update="growl"/>
+    		<br></br>
+    		<br></br>
+    		
+			 <p:dialog header="Table Dialog" widgetVar="tableDialog" modal="true" resizable="false" styleClass="custom-dialog">
+			    <style>
+			        .custom-dialog .ui-dialog-content {
+			            max-height: 400px;
+			            overflow-y: auto;
+			        }
+			    </style>
+			  <p:dataTable value="#{account.showTransactions()}" var="item">
+			    <p:column headerText="first account">
+			      <h:outputText value="#{item.getFromAccount().getClient().getName()}" />
+			    </p:column>
+			    <p:column headerText="second account">
+			      <h:outputText value="#{item.getToAccount().getClient().getName()}" />
+			    </p:column>
+			    <p:column headerText="status">
+			      <h:outputText value="#{item.getClient().getId()}" />
+			    </p:column>
+			  </p:dataTable>
+			</p:dialog> 
+			<p:commandButton value="Open Dialog" onclick="PF('tableDialog').show()" />  
+	</h:form>
+	</h:body>
+</html>
