@@ -1,11 +1,15 @@
 package ServicesUtility;
 
+import BeansUtility.LanguagesInfo;
 import BeansUtility.MessagesNotification;
 
 public class BankSystemException extends Exception{
 
 	public BankSystemException() {
-		super("something went wrong please try again later");
+		if(LanguagesInfo.selectedLanguage.equals("en"))
+			new BankSystemException("something went wrong please try again later");
+		else
+			new BankSystemException("حاول مرة اخري لاحقا");
 		// TODO Auto-generated constructor stub
 	}
 

@@ -2,6 +2,7 @@ package ORMs;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -20,6 +21,8 @@ public class Transaction {
 	private Account fromAccount;
 	@OneToOne
 	private Account toAccount;
+	@Column(name = "amount_of_transfered_money")
+	private Integer amountOfTransferedMoney;
 	public int getId() {
 		return id;
 	}
@@ -55,6 +58,12 @@ public class Transaction {
 	}
 	public void setToAccount(Account toAccount) {
 		this.toAccount = toAccount;
+	}
+	public Integer getAmountOfTransferedMoney() {
+		return amountOfTransferedMoney;
+	}
+	public void setAmountOfTransferedMoney(int amountOfTransferedMoney) {
+		this.amountOfTransferedMoney = amountOfTransferedMoney;
 	}
 	
 }

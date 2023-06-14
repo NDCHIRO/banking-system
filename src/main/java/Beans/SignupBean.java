@@ -30,8 +30,10 @@ import org.hibernate.cfg.Configuration;
 
 
 import BeansUtility.ExceptionLogger;
+import BeansUtility.LanguagesInfo;
 import BeansUtility.MessagesNotification;
 import ORMs.Account;
+import ORMs.BankEmployee;
 import ORMs.Client;
 import Services.SignUpService;
 import ServicesUtility.BankSystemException;
@@ -65,6 +67,7 @@ public class SignupBean {
 	        {
 	        	   if(entry.getValue().toString().equals(new_language_code))
 	        	   {
+	        		   LanguagesInfo.selectedLanguage = new_language_code;		// options: ar_EG , en
 	        		    FacesContext.getCurrentInstance()
 	        			.getViewRoot().setLocale((Locale)entry.getValue());
 	        	   }
@@ -75,6 +78,7 @@ public class SignupBean {
 	public String submit()
 	{
 		String page="";
+		System.out.println("hellooo "+LanguagesInfo.selectedLanguage);
 		try 
 		{
 			SignUpService.saveClientData(createClient());
@@ -85,7 +89,10 @@ public class SignupBean {
 		}
 		catch(BankSystemException e)
 		{
-			MessagesNotification.showErrorMessage("Registration Failed",e.getMessage());
+			if(LanguagesInfo.selectedLanguage.equals("en"))
+				MessagesNotification.showErrorMessage("Registration Failed",e.getMessage());
+			else
+				MessagesNotification.showErrorMessage("فشل التسجيل",e.getMessage());
 		}
 		catch(Exception e)
 		{
@@ -118,6 +125,14 @@ public class SignupBean {
 		client.setRole(selectedOption);
 		client.setNetSalary(salary);
 		return client;
+	}
+	
+	public BankEmployee createEmployee()
+	{
+		BankEmployee bankEmployee = new BankEmployee();
+		bankEmployee.setName(username);
+		bankEmployee.setPosition("employee");
+		return bankEmployee;
 	}
 	
  
@@ -179,6 +194,7 @@ public class SignupBean {
 	public void setSalary(int salary) {
 		this.salary = salary;
 	}
+
 
 
 }

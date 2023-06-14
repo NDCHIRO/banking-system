@@ -60,12 +60,28 @@ public class TablesSearch {
 		return null;
 	}
 	
+	/*public static Transaction searchForTransaction(Session session , int transactionId)
+	{
+		
+	}*/
+	
 	public static List<Transaction> getAllTransaction(Session session)
 	{
 		//List<Transaction> transactions = new ArrayList<Transaction>();
+		session.clear();
+
 		String hql = "FROM Transaction";
 		Query<Transaction> query = session.createQuery(hql,Transaction.class);
 		List<Transaction> transactions = query.getResultList();
 		return transactions;    
+	}
+	
+	public static List<Transaction> showAllTransactions() throws BankSystemException
+	{
+		List<Transaction> transactions;
+		Session session = SessionService.startSession();
+		 transactions=TablesSearch.getAllTransaction(session);
+		SessionService.endSession(session);
+		return transactions;   
 	}
 }

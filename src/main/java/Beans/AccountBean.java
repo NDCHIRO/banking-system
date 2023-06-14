@@ -31,6 +31,7 @@ public class AccountBean {
 	private String address;
 	private String mail;
 	private String mobileNumber;
+	private Transaction selectedTransaction;
 	public AccountBean()
 	{
 		
@@ -69,7 +70,7 @@ public class AccountBean {
 	{
 		List<Transaction> transactions = null;
 		try {
-			transactions=AccountService.getAllTransactions();
+			transactions=TablesSearch.showAllTransactions();
 		}
 
 		catch(BankSystemException e)
@@ -100,6 +101,11 @@ public class AccountBean {
 			ExceptionLogger.logException(e);
 			MessagesNotification.showErrorMessage("Error", new BankSystemException().getMessage());
 		}
+	}
+	
+	public void onRowSelect()
+	{
+		System.out.println("selectedTransaction "+selectedTransaction);
 	}
 	
 	public String getUsername() {
@@ -165,5 +171,13 @@ public class AccountBean {
 
 	public void setTransferedMoney(int transferedMoney) {
 		this.transferedMoney = transferedMoney;
+	}
+
+	public Transaction getSelectedTransaction() {
+		return selectedTransaction;
+	}
+
+	public void setSelectedTransaction(Transaction selectedTransaction) {
+		this.selectedTransaction = selectedTransaction;
 	}
 }

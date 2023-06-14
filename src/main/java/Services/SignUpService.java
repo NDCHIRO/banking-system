@@ -13,8 +13,10 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
+import BeansUtility.LanguagesInfo;
 import BeansUtility.MessagesNotification;
 import ORMs.Account;
+import ORMs.BankEmployee;
 import ORMs.Client;
 import ServicesUtility.TablesSearch;
 import ServicesUtility.BankSystemException;
@@ -25,7 +27,7 @@ public class SignUpService {
 	public SignUpService() {
 		// TODO Auto-generated constructor stub
 	}
-	
+
 	public static void saveClientData(Client client) throws BankSystemException
 	{
 		checkUserName(client.getName());
@@ -47,7 +49,12 @@ public class SignUpService {
 	public static void checkUserName(String username) throws BankSystemException
 	{
 		if(username.length()<5 || username.length()>10)
-			throw new BankSystemException("username must be in range of 5 to 10");
+		{
+			if(LanguagesInfo.selectedLanguage.equals("en"))
+				throw new BankSystemException("username must be in range of 5 to 10");
+			else
+				throw new BankSystemException("اسم المستخدم يجب ان يكون من 5 ل 10 حروف");
+		}
 	}
 	
 	public static void checkValidPassword(String password)	throws BankSystemException
@@ -56,7 +63,16 @@ public class SignUpService {
 		Pattern pattern = Pattern.compile(regex);
 		Matcher matcher = pattern.matcher(password);
 		if(!matcher.matches())
-		   throw new BankSystemException("password is not valid");
+		{
+			if(LanguagesInfo.selectedLanguage.equals("en"))
+				{
+					throw new BankSystemException("password is not valid, it must contains small,capital, numbers,special characters");
+				}
+			else
+			{
+				throw new BankSystemException("ادخل كلمه مرور صحيحه تحتوي علي حروف كبيرة و صغيرة و ارقام ");
+			}
+		}
 	}
 	
 	public static void checkValidMail(String mail) throws BankSystemException
@@ -65,7 +81,16 @@ public class SignUpService {
 		Pattern pattern = Pattern.compile(regex);
 		Matcher matcher = pattern.matcher(mail);
 		if(!matcher.matches())
-			throw new BankSystemException("Mail is not valid");
+		{
+			if(LanguagesInfo.selectedLanguage.equals("en"))
+				{
+					throw new BankSystemException("Mail is not valid, please enter a valid mail");
+				}
+				else
+				{
+					throw new BankSystemException("ادخل ايميل صحيح ");
+				}
+		}
 	}
 
 	public static Account createAccount(Client client)

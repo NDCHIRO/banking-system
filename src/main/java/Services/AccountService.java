@@ -48,14 +48,7 @@ public class AccountService {
 	}
 	
 	
-	public static List<Transaction> getAllTransactions() throws BankSystemException
-	{
-		List<Transaction> transactions;
-		Session session = SessionService.startSession();
-		 transactions=TablesSearch.getAllTransaction(session);
-		SessionService.endSession(session);
-		return transactions;   
-	}
+	
 	
 	
 	public static void transferMoney(int amountOfMoney,String transferedUsername) throws BankSystemException
@@ -84,13 +77,8 @@ public class AccountService {
 			throw new BankSystemException("the amount of Money is more than you");		
 		}
 		
-		fromAccount.setAmount(fromAccount.getAmount()-amountOfMoney);
-		toAccount.setAmount(toAccount.getAmount()+amountOfMoney);
+		Transaction transaction = createTransaction(fromAccount,toAccount,fromClient,amountOfMoney);
 		
-		Transaction transaction = createTransaction(fromAccount,toAccount,fromClient);
-		
-		session.update(fromAccount);
-		session.update(toAccount);
 		session.save(transaction);
 		
 		SessionService.endSession(session);
@@ -98,13 +86,14 @@ public class AccountService {
 	}
 	
 	
-	public static Transaction createTransaction(Account fromAccount,Account toAccount,Client fromClient)
+	public static Transaction createTransaction(Account fromAccount,Account toAccount,Client fromClient,int amountOfMoney)
 	{
 		Transaction transaction = new Transaction();
 		transaction.setFromAccount(fromAccount);
 		transaction.setToAccount(toAccount);
 		transaction.setClient(fromClient);
 		transaction.setDescription("pending");
+		transaction.setAmountOfTransferedMoney(amountOfMoney);
 		return transaction;
 	}
 	
