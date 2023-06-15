@@ -14,7 +14,7 @@ import org.hibernate.SessionFactory;
 
 import BeansUtility.ClientLogin;
 import ORMs.Client;
-import ServicesUtility.TablesSearch;
+import ServicesUtility.ClientServiceUtility;
 import ServicesUtility.BankSystemException;
 import ServicesUtility.SessionService;
 
@@ -22,29 +22,33 @@ public class SignInService {
 	//returns the next page name to the bean
 	public static String checkSignInData(String username, String password) throws BankSystemException
 	{
-	    Session session = SessionService.startSession();
-	    Client client = new Client();
-	    client.setName(username);
-	    client.setPassword(password);
-	    client = TablesSearch.searchForClient(session,client);
-	    if(client==null)
+		try
 		{
-	    	SessionService.endSession(session);
-	    	throw new BankSystemException("please enter the correct username and password");
+		    Session session = SessionService.startSession();
+		    Client client = new Client();
+		    client.setName(username);
+		    client.setPassword(password);
+		    client = ClientServiceUtility.searchForClient(session,client);
+		    if(client==null)
+			{
+		    	SessionService.endSession(session);
+		    	throw new BankSystemException("please enter the correct username and password");
+			}
+		    System.out.println("found");
+		    ClientLogin.setClient("client",client);
+		    SessionService.endSession(session);
+		    if(client.getRole().equals("client"))
+		    	return "account";
+		    else
+		    	return "transaction";
 		}
-	    System.out.println("found");
-	    ClientLogin.setClient("client",client);
-	    SessionService.endSession(session);
-	    if(client.getRole().equals("client"))
-	    	return "account";
-	    else
-	    	return "transaction";
+		catch(BankSystemException e) {
+			throw new BankSystemException(e.getMessage());
+		}
+		catch(Exception e ) {
+			throw new BankSystemException();
+		}
 	}
-	
-	
-	
-	
-	
 	
 	
 	

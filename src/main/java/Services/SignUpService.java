@@ -18,7 +18,7 @@ import BeansUtility.MessagesNotification;
 import ORMs.Account;
 import ORMs.BankEmployee;
 import ORMs.Client;
-import ServicesUtility.TablesSearch;
+import ServicesUtility.ClientServiceUtility;
 import ServicesUtility.BankSystemException;
 import ServicesUtility.SessionService;
 
@@ -29,21 +29,30 @@ public class SignUpService {
 	}
 
 	public static void saveClientData(Client client) throws BankSystemException
-	{
-		checkUserName(client.getName());
-		checkValidPassword(client.getPassword());
-		checkValidMail(client.getMail());
-		Session session;
-		session = SessionService.startSession();
-		if(TablesSearch.searchForClient(session,client.getName(),client.getPassword()) == true)
+	{ 
+		try 
 		{
+			checkUserName(client.getName());
+			checkValidPassword(client.getPassword());
+			checkValidMail(client.getMail());
+			Session session;
+			session = SessionService.startSession();
+			if(ClientServiceUtility.searchForClient(session,client.getName(),client.getPassword()) == true)
+			{
+				SessionService.endSession(session);
+				throw new BankSystemException("username already exists please type another one");
+			}
+			Account account = createAccount(client);
+			session.save(client);
+			session.save(account);
 			SessionService.endSession(session);
-			throw new BankSystemException("username already exists please type another one");
 		}
-		Account account = createAccount(client);
-		session.save(client);
-		session.save(account);
-		SessionService.endSession(session);
+		catch(BankSystemException e) {
+			throw new BankSystemException(e.getMessage());
+		}
+		catch(Exception e ) {
+			throw new BankSystemException();
+		}
 	}
 		
 	public static void checkUserName(String username) throws BankSystemException

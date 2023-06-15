@@ -10,7 +10,7 @@ import ORMs.Account;
 import ORMs.Client;
 import ORMs.Transaction;
 
-public class TablesSearch {
+public class ClientServiceUtility {
 	
 	public static boolean searchForClient(Session session,String username,String password)
 	{
@@ -46,42 +46,7 @@ public class TablesSearch {
 		return null;
 	}
 	
-	public static Account searchForAccount(Session session,int clientId) throws BankSystemException
-	{
-		//Session session = SessionService.startSession();
-		String hql = "FROM Account";
-		Query<Account> query = session.createQuery(hql,Account.class);
-		List<Account> accounts = query.getResultList();
-		for (Account account : accounts) 
-		    if((account.getClient().getId()==(clientId)))
-		    {
-		    	return account;
-		    }
-		return null;
-	}
 	
-	/*public static Transaction searchForTransaction(Session session , int transactionId)
-	{
-		
-	}*/
 	
-	public static List<Transaction> getAllTransaction(Session session)
-	{
-		//List<Transaction> transactions = new ArrayList<Transaction>();
-		session.clear();
-
-		String hql = "FROM Transaction";
-		Query<Transaction> query = session.createQuery(hql,Transaction.class);
-		List<Transaction> transactions = query.getResultList();
-		return transactions;    
-	}
 	
-	public static List<Transaction> showAllTransactions() throws BankSystemException
-	{
-		List<Transaction> transactions;
-		Session session = SessionService.startSession();
-		 transactions=TablesSearch.getAllTransaction(session);
-		SessionService.endSession(session);
-		return transactions;   
-	}
 }

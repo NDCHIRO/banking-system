@@ -22,6 +22,11 @@
 			<br></br>
     		<br></br>
 			<p:commandButton action="#{signin.submit()}" value="login" update="growl" />
+			<br></br>
+    		<br></br>
+			<p:commandButton value="go to sign up"  action="#{signin.goToSignUp()}" update="growl" 
+    		 	styleClass="mr-2" style="width: 10rem"  >
+    		</p:commandButton>
 		</h:form>
 	</body>
 </html>

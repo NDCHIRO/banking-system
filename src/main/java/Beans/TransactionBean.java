@@ -12,14 +12,14 @@ import ORMs.Transaction;
 import Services.AccountService;
 import Services.TransactionService;
 import ServicesUtility.BankSystemException;
-import ServicesUtility.TablesSearch;
+import ServicesUtility.ClientServiceUtility;
+import ServicesUtility.TransactionServiceUtility;
 
 @ManagedBean(name="transaction")
 @SessionScoped
 public class TransactionBean {
-	String selectedStatus;
+	String selectedStatus="pending";
 	private Transaction selectedTransaction;
-	private String selectedItem;
 
 	
 	public TransactionBean() { }
@@ -28,10 +28,15 @@ public class TransactionBean {
 	{
 		List<Transaction> transactions = null;
 		try {
-			transactions = TablesSearch.showAllTransactions();
+			transactions = TransactionServiceUtility.showAllTransactions();
+			
 		} catch (BankSystemException e) {
 			ExceptionLogger.logException(e);
-			MessagesNotification.showErrorMessage("failed to loading table",new BankSystemException().getMessage());
+			MessagesNotification.showErrorMessage("failed to load table",new BankSystemException().getMessage());
+		}
+		catch (Exception e) {
+			ExceptionLogger.logException(e);
+			MessagesNotification.showErrorMessage("Error happened",new BankSystemException().getMessage());
 		}
 		return transactions;
 	}
@@ -47,7 +52,7 @@ public class TransactionBean {
 		}
 		catch(BankSystemException e)
 		{
-			MessagesNotification.showErrorMessage("error happened while saving changes",e.getMessage());
+			MessagesNotification.showErrorMessage("error occured while saving changes",e.getMessage());
 		}
 		catch(Exception e)
 		{
@@ -73,15 +78,12 @@ public class TransactionBean {
 		submit();
 	}
 	
-
-
-
 	public String getSelectedStatus() {
 		return selectedStatus;
 	}
 
 	public void setSelectedStatus(String selectedStatus) {
-		this.selectedStatus = selectedStatus;
+			this.selectedStatus = selectedStatus;
 	}
 
 	public Transaction getSelectedTransaction() {

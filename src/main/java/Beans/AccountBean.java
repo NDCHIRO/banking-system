@@ -17,7 +17,8 @@ import ORMs.Client;
 import ORMs.Transaction;
 import Services.AccountService;
 import ServicesUtility.BankSystemException;
-import ServicesUtility.TablesSearch;
+import ServicesUtility.ClientServiceUtility;
+import ServicesUtility.TransactionServiceUtility;
 
 //create module dialiag for transaction
 
@@ -63,6 +64,10 @@ public class AccountBean {
 	    	ExceptionLogger.logException(e);
 			MessagesNotification.showErrorMessage("data failed to load",new BankSystemException().getMessage());
 	    }
+	    catch (Exception e) {
+			ExceptionLogger.logException(e);
+			MessagesNotification.showErrorMessage("Error happened",new BankSystemException().getMessage());
+		}
 	    return page;
 	}
 	
@@ -70,7 +75,7 @@ public class AccountBean {
 	{
 		List<Transaction> transactions = null;
 		try {
-			transactions=TablesSearch.showAllTransactions();
+			transactions=TransactionServiceUtility.showAllTransactions();
 		}
 
 		catch(BankSystemException e)
@@ -89,7 +94,7 @@ public class AccountBean {
 		try
 		{
 			AccountService.transferMoney(transferedMoney,transferedUsername);
-			MessagesNotification.showDoneMessage("Done", "Money sent");
+			MessagesNotification.showDoneMessage("request sent", "waiting for the acceptance of the bank");
 
 		}
 		catch(BankSystemException e)
@@ -119,6 +124,10 @@ public class AccountBean {
 		} catch (BankSystemException e) {
 			MessagesNotification.showErrorMessage("address failed to load",e.getMessage());
 		}
+		catch (Exception e) {
+			ExceptionLogger.logException(e);
+			MessagesNotification.showErrorMessage("Error happened",new BankSystemException().getMessage());
+		}
 		return address;
 	}
 	public void setAddress(String address) {
@@ -131,6 +140,10 @@ public class AccountBean {
 		} catch (BankSystemException e) {
 			MessagesNotification.showErrorMessage("mail failed to load",e.getMessage());
 		}
+		catch (Exception e) {
+			ExceptionLogger.logException(e);
+			MessagesNotification.showErrorMessage("Error happened",new BankSystemException().getMessage());
+		}
 		return mail;
 	}
 	public void setMail(String mail) {
@@ -142,6 +155,10 @@ public class AccountBean {
 			mobileNumber = ClientLogin.getClient().getMobile();
 		} catch (BankSystemException e) {
 			MessagesNotification.showErrorMessage("mobile number failed to load",e.getMessage());
+		}
+		catch (Exception e) {
+			ExceptionLogger.logException(e);
+			MessagesNotification.showErrorMessage("Error happened",new BankSystemException().getMessage());
 		}
 		return mobileNumber;
 	}
@@ -157,7 +174,19 @@ public class AccountBean {
 		this.transferedUsername = transferedUsername;
 	}
 
-	public int getAmountOfMoney() throws Exception {
+	public int getAmountOfMoney() {
+		int amountOfMoney=0;
+		try {
+		 amountOfMoney=AccountService.sendAccountToView().getAmount();
+		}
+		catch(BankSystemException e)
+		{
+			MessagesNotification.showErrorMessage("money failed to load",e.getMessage());
+		}
+		catch (Exception e) {
+			ExceptionLogger.logException(e);
+			MessagesNotification.showErrorMessage("Error happened",new BankSystemException().getMessage());
+		}
 		return amountOfMoney;
 	}
 

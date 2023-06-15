@@ -5,6 +5,8 @@ import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 
 import BeansUtility.ExceptionLogger;
 import BeansUtility.MessagesNotification;
@@ -43,6 +45,20 @@ public class SignInBean implements Serializable {
 			MessagesNotification.showErrorMessage("login failed",new BankSystemException().getMessage());
 		}
 		return page;
+	}
+	
+	public String goToSignUp()
+	{
+		String page="";
+		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+	    try {
+	        externalContext.redirect(externalContext.getRequestContextPath() + "/index.xhtml");
+	    } catch (Exception e) {
+	    	ExceptionLogger.logException(e);
+			MessagesNotification.showErrorMessage("page Failed to load",new BankSystemException().getMessage());
+
+	    }
+	    return page;
 	}
 	
 	public SignInBean() {

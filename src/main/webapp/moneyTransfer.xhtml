@@ -42,11 +42,11 @@
 			      <h:outputText value="#{item.getToAccount().getClient().getName()}" />
 			    </p:column>
 			    <p:column headerText="status">
-			      <h:outputText value="#{item.getClient().getId()}" />
+			      <h:outputText value="#{item.getDescription()}" />
 			    </p:column>
 			  </p:dataTable>
 			</p:dialog> 
-			<p:commandButton value="Open Dialog" onclick="PF('tableDialog').show()" />  
+			<p:commandButton value="show transactions" onclick="PF('tableDialog').show()" />  
 	</h:form>
 	</h:body>
 </html>

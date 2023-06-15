@@ -34,17 +34,15 @@
 			      <h:outputText value="#{item.getToAccount().getClient().getName()}" />
 			    </p:column>
 			    <p:column headerText="status">
-			      	<p:menu>
-					    <p:submenu>
-					        <p:menuitem value="Pending" action="#{transaction.selectPending}"   />  
-					        <p:menuitem value="Approved" action="#{transaction.selectApproved}" />
-					        <p:menuitem value="Rejected" action="#{transaction.selectRejected}" />
-					    </p:submenu>
-					</p:menu>
+			      	<p:menuButton id="menuButton" value="#{item.getDescription()}">
+					        <p:menuitem value="Pending" action="#{transaction.selectPending}"  update="menuButton" />  
+					        <p:menuitem value="Approved" action="#{transaction.selectApproved}" update="menuButton"/>
+					        <p:menuitem value="Rejected" action="#{transaction.selectRejected}" update="menuButton"/>
+					 </p:menuButton>
 			    </p:column>
 			  </p:dataTable>
 			</p:dialog> 
-			<p:commandButton value="Open Dialog" onclick="PF('tableDialog').show()" /> 
+			<p:commandButton value="show transactions" onclick="PF('tableDialog').show()" /> 
 			<script>
 			    // JQuery to Show the dialog on page load
 			    $(document).ready(function() {

@@ -39,7 +39,7 @@ import Services.SignUpService;
 import ServicesUtility.BankSystemException;
 
 @ManagedBean(name = "signup")
-@ViewScoped
+@SessionScoped
 public class SignupBean {
 	private String username;
 	private String password;
