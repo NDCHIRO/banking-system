@@ -11,7 +11,7 @@ public class TransactionServiceUtility {
 	public static List<Transaction> getAllTransaction(Session session)
 	{
 		//List<Transaction> transactions = new ArrayList<Transaction>();
-		String hql = "FROM Transaction";
+		String hql = "FROM Transaction ORDER BY id DESC";
 		Query<Transaction> query = session.createQuery(hql,Transaction.class);
 		List<Transaction> transactions = query.getResultList();
 		return transactions;    

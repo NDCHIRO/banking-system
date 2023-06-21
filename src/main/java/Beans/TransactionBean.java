@@ -2,9 +2,15 @@ package Beans;
 
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
+import org.primefaces.model.menu.DefaultMenuItem;
+import org.primefaces.model.menu.DefaultMenuModel;
+import org.primefaces.model.menu.MenuModel;
+
+import BeansUtility.ClientLogOut;
 import BeansUtility.ExceptionLogger;
 import BeansUtility.MessagesNotification;
 import BeansUtility.TransactionsTable;
@@ -20,7 +26,6 @@ import ServicesUtility.TransactionServiceUtility;
 public class TransactionBean {
 	String selectedStatus="pending";
 	private Transaction selectedTransaction;
-
 	
 	public TransactionBean() { }
 	
@@ -41,6 +46,13 @@ public class TransactionBean {
 		return transactions;
 	}
 
+	
+	public void logOut()
+	{
+		ClientLogOut.logOutCurrentClient();
+	}
+	
+	
 	public void submit()
 	{
 		try {
@@ -48,7 +60,7 @@ public class TransactionBean {
 			//MessagesNotification.showDoneMessage("transaction "+selectedStatus,"notification sent to "+selectedTransaction.getClient().getName());
 
 			System.out.println("selectedTransaction "+selectedTransaction.getDescription());
-			System.out.println("selectedTransaction "+selectedTransaction.getId());
+			System.out.println("selectedTransaction "+selectedTransaction.getId()); 
 		}
 		catch(BankSystemException e)
 		{
@@ -60,6 +72,8 @@ public class TransactionBean {
 			MessagesNotification.showErrorMessage("error happened",new BankSystemException().getMessage());
 		}
 	}
+	
+	
 	public void selectPending() 
 	{
 		selectedStatus="pending";

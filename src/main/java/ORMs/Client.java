@@ -23,6 +23,7 @@ public class Client {
 	private String mobile;
 	private String mail;
 	private String role;
+	private String selectedLanguage="en";
 	public Client()
 	{}
 	public int getId() {
@@ -75,6 +76,12 @@ public class Client {
 	}
 	public void setRole(String role) {
 		this.role = role;
+	}
+	public String getSelectedLanguage() {
+		return selectedLanguage;
+	}
+	public void setSelectedLanguage(String selectedLanguage) {
+		this.selectedLanguage = selectedLanguage;
 	}
 
 }

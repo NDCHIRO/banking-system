@@ -13,6 +13,7 @@ import javax.faces.application.ViewHandler;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.FacesException;
+import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -37,6 +38,7 @@ import ORMs.BankEmployee;
 import ORMs.Client;
 import Services.SignUpService;
 import ServicesUtility.BankSystemException;
+import ServicesUtility.Languages;
 
 @ManagedBean(name = "signup")
 @SessionScoped
@@ -48,8 +50,11 @@ public class SignupBean {
 	private int salary;
 	private String selectedOption;
 	private String languageCode;
+	private String selectedLanguage;
 	private static Map<String,Object> countries;
 	
+	
+	 //private ResourceBundle bundle;
 	static {
 		countries = new LinkedHashMap<String,Object>();
 		countries.put("English", Locale.ENGLISH);
@@ -67,7 +72,7 @@ public class SignupBean {
 	        {
 	        	   if(entry.getValue().toString().equals(new_language_code))
 	        	   {
-	        		   LanguagesInfo.selectedLanguage = new_language_code;		// options: ar_EG , en
+	        		   selectedLanguage = new_language_code;		// options: ar_EG , en
 	        		    FacesContext.getCurrentInstance()
 	        			.getViewRoot().setLocale((Locale)entry.getValue());
 	        	   }
@@ -75,32 +80,43 @@ public class SignupBean {
 	}
 	
 
-	public String submit()
+	public String submit() throws BankSystemException
 	{
 		String page="";
 		System.out.println("hellooo "+LanguagesInfo.selectedLanguage);
+		Client client = null;
 		try 
 		{
-			SignUpService.saveClientData(createClient());
-			MessagesNotification.showDoneMessage("Done","data is saved to the database");
+			client = createClient();
+			SignUpService.saveClientData(client);
+			
+			reset();
 			UIViewRoot view = FacesContext.getCurrentInstance().getViewRoot();
 			page = view.getViewId() + "?faces-redirect=true";
+			MessagesNotification.showDoneMessage("Done","data is saved to the database");
 			return page; 
 		}
 		catch(BankSystemException e)
 		{
-			if(LanguagesInfo.selectedLanguage.equals("en"))
-				MessagesNotification.showErrorMessage("Registration Failed",e.getMessage());
-			else
-				MessagesNotification.showErrorMessage("فشل التسجيل",e.getMessage());
+			MessagesNotification.showErrorMessage(Languages.createBundle(client).getString("error_registrationFailed"),e.getMessage());
+				
 		}
 		catch(Exception e)
 		{
 	        ExceptionLogger.logException(e);
-			MessagesNotification.showErrorMessage("Registration Failed",new BankSystemException().getMessage());
+			MessagesNotification.showErrorMessage(Languages.createBundle(client).getString("error_registrationFailed"),new BankSystemException().getMessage());
 		}
 		return page;
 	}
+	
+	
+	public void reset() {  
+	         setUsername("");
+	         setMail("");
+	         setPassword("");
+	         setMobileNumber("");
+	         
+	   } 
 	
 	public String goToSignIn()
 	{
@@ -124,6 +140,7 @@ public class SignupBean {
 		client.setMail(mail);
 		client.setRole(selectedOption);
 		client.setNetSalary(salary);
+		client.setSelectedLanguage(selectedLanguage);
 		return client;
 	}
 	

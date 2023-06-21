@@ -19,7 +19,7 @@
     		<p:inputText id="mail" value="#{account.mail}" />
 			<br></br>
     		<br></br>
-    		Address: <p:inputText id="address"  value="#{account.address}"/>
+    		#{account.addressTextField} <p:inputText id="address"  value="#{account.address}"/>
     		<br></br>
     		<br></br>
     		
@@ -34,7 +34,13 @@
 			<p:commandButton value="tranfer money page"  action="#{account.goToMoneyTransferPage()}" update="growl" 
     		 	styleClass="mr-2" style="width: 10rem" >
     		 </p:commandButton>
+    		 <br></br>
+    		<br></br>
+    		 <p:commandButton value="logout"  action="#{account.logOut()}" update="growl" 
+    		 	styleClass="mr-2" style="width: 10rem" >
+    		 </p:commandButton>
 		</h:form>
+		
 	</h:body>
 </html>
 		

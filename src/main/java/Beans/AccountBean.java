@@ -10,6 +10,7 @@ import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
+import BeansUtility.ClientLogOut;
 import BeansUtility.ClientLogin;
 import BeansUtility.ExceptionLogger;
 import BeansUtility.MessagesNotification;
@@ -18,6 +19,7 @@ import ORMs.Transaction;
 import Services.AccountService;
 import ServicesUtility.BankSystemException;
 import ServicesUtility.ClientServiceUtility;
+import ServicesUtility.Languages;
 import ServicesUtility.TransactionServiceUtility;
 
 //create module dialiag for transaction
@@ -26,13 +28,12 @@ import ServicesUtility.TransactionServiceUtility;
 @SessionScoped
 public class AccountBean {
 	private String username;
-	private String transferedUsername;
 	private int amountOfMoney;
-	private int transferedMoney;
 	private String address;
 	private String mail;
 	private String mobileNumber;
 	private Transaction selectedTransaction;
+	private String addressTextField;
 	public AccountBean()
 	{
 		
@@ -42,7 +43,7 @@ public class AccountBean {
 	{
 		try {
 			AccountService.editClientDataAndAccount(address,mail,mobileNumber,amountOfMoney);
-			MessagesNotification.showDoneMessage("data edited successfully", "Done");
+			MessagesNotification.showDoneMessage(Languages.createBundle().getString("message_Done"), "Done");
 		}
 		catch (BankSystemException e) {
 			MessagesNotification.showErrorMessage("data failed to load",e.getMessage());
@@ -71,47 +72,12 @@ public class AccountBean {
 	    return page;
 	}
 	
-	public List<Transaction> showTransactions() throws BankSystemException
+	public void logOut()
 	{
-		List<Transaction> transactions = null;
-		try {
-			transactions=TransactionServiceUtility.showAllTransactions();
-		}
-
-		catch(BankSystemException e)
-		{
-			MessagesNotification.showErrorMessage("Error", e.getMessage());
-		}
-		catch(Exception e)
-		{
-			MessagesNotification.showErrorMessage("Error", new BankSystemException().getMessage());
-		}
-		return transactions;
+		ClientLogOut.logOutCurrentClient();
 	}
 	
-	public void transferMoney() throws BankSystemException
-	{
-		try
-		{
-			AccountService.transferMoney(transferedMoney,transferedUsername);
-			MessagesNotification.showDoneMessage("request sent", "waiting for the acceptance of the bank");
-
-		}
-		catch(BankSystemException e)
-		{
-			MessagesNotification.showErrorMessage("Error", e.getMessage());
-		}
-		catch(Exception e)
-		{
-			ExceptionLogger.logException(e);
-			MessagesNotification.showErrorMessage("Error", new BankSystemException().getMessage());
-		}
-	}
 	
-	public void onRowSelect()
-	{
-		System.out.println("selectedTransaction "+selectedTransaction);
-	}
 	
 	public String getUsername() {
 		return username;
@@ -166,14 +132,6 @@ public class AccountBean {
 		this.mobileNumber = mobileNumber;
 	}
 
-	public String getTransferedUsername() {
-		return transferedUsername;
-	}
-
-	public void setTransferedUsername(String transferedUsername) {
-		this.transferedUsername = transferedUsername;
-	}
-
 	public int getAmountOfMoney() {
 		int amountOfMoney=0;
 		try {
@@ -194,19 +152,26 @@ public class AccountBean {
 		this.amountOfMoney = amountOfMoney;
 	}
 
-	public int getTransferedMoney() {
-		return transferedMoney;
-	}
-
-	public void setTransferedMoney(int transferedMoney) {
-		this.transferedMoney = transferedMoney;
-	}
-
 	public Transaction getSelectedTransaction() {
 		return selectedTransaction;
 	}
 
 	public void setSelectedTransaction(Transaction selectedTransaction) {
 		this.selectedTransaction = selectedTransaction;
+	}
+
+	public String getAddressTextField() {
+		String addressTextField="";
+		try {
+			 addressTextField=Languages.createBundle(ClientLogin.getClient()).getString("message_address");
+		} catch (BankSystemException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return addressTextField;
+	}
+
+	public void setAddressTextField(String addressTextField) {
+		this.addressTextField = addressTextField;
 	}
 }

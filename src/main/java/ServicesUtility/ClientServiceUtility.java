@@ -43,7 +43,7 @@ public class ClientServiceUtility {
 		for (Client client : clients) 
 		    if((client.getName().equals(username)))
 		    	return client;
-		return null;
+		throw new BankSystemException("username not found");
 	}
 	
 	

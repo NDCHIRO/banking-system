@@ -1,10 +1,15 @@
 package Services;
 
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
@@ -19,11 +24,13 @@ import ORMs.Account;
 import ORMs.BankEmployee;
 import ORMs.Client;
 import ServicesUtility.ClientServiceUtility;
+import ServicesUtility.Languages;
 import ServicesUtility.BankSystemException;
 import ServicesUtility.SessionService;
 
 public class SignUpService {
-	
+	ResourceBundle bundle = ResourceBundle.getBundle("languages.message");
+	 
 	public SignUpService() {
 		// TODO Auto-generated constructor stub
 	}
@@ -32,15 +39,15 @@ public class SignUpService {
 	{ 
 		try 
 		{
-			checkUserName(client.getName());
-			checkValidPassword(client.getPassword());
-			checkValidMail(client.getMail());
+			checkUserName(client);
+			checkValidPassword(client);
+			checkValidMail(client);
 			Session session;
 			session = SessionService.startSession();
 			if(ClientServiceUtility.searchForClient(session,client.getName(),client.getPassword()) == true)
 			{
 				SessionService.endSession(session);
-				throw new BankSystemException("username already exists please type another one");
+				throw new BankSystemException(Languages.createBundle(client).getString("error_userNameUsed"));
 			}
 			Account account = createAccount(client);
 			session.save(client);
@@ -55,50 +62,32 @@ public class SignUpService {
 		}
 	}
 		
-	public static void checkUserName(String username) throws BankSystemException
-	{
-		if(username.length()<5 || username.length()>10)
-		{
-			if(LanguagesInfo.selectedLanguage.equals("en"))
-				throw new BankSystemException("username must be in range of 5 to 10");
-			else
-				throw new BankSystemException("اسم المستخدم يجب ان يكون من 5 ل 10 حروف");
-		}
+	public static void checkUserName(Client client) throws BankSystemException {
+		//languages is the package name
+	    if (client.getName().length() < 5 || client.getName().length() > 10) {
+	        throw new BankSystemException(Languages.createBundle(client).getString("error_userNameLength"));
+	    }
 	}
 	
-	public static void checkValidPassword(String password)	throws BankSystemException
+	public static void checkValidPassword(Client client)	throws BankSystemException
 	{
 		String regex = "(?=^.{8,}$)(?=.*\\d)(?=.*[!@#$%^&*_]+)(?![.\\n])(?=.*[A-Z])(?=.*[a-z]).*$";
 		Pattern pattern = Pattern.compile(regex);
-		Matcher matcher = pattern.matcher(password);
+		Matcher matcher = pattern.matcher(client.getPassword());
 		if(!matcher.matches())
 		{
-			if(LanguagesInfo.selectedLanguage.equals("en"))
-				{
-					throw new BankSystemException("password is not valid, it must contains small,capital, numbers,special characters");
-				}
-			else
-			{
-				throw new BankSystemException("ادخل كلمه مرور صحيحه تحتوي علي حروف كبيرة و صغيرة و ارقام ");
-			}
+			throw new BankSystemException(Languages.createBundle(client).getString("error_passwordNotValid"));
 		}
 	}
 	
-	public static void checkValidMail(String mail) throws BankSystemException
+	public static void checkValidMail(Client client) throws BankSystemException
 	{
 		String regex = "^[A-Za-z0-9+_.-]+@+[A-Za-z0-9+_.-]+(.+)$";
 		Pattern pattern = Pattern.compile(regex);
-		Matcher matcher = pattern.matcher(mail);
+		Matcher matcher = pattern.matcher(client.getMail());
 		if(!matcher.matches())
 		{
-			if(LanguagesInfo.selectedLanguage.equals("en"))
-				{
-					throw new BankSystemException("Mail is not valid, please enter a valid mail");
-				}
-				else
-				{
-					throw new BankSystemException("ادخل ايميل صحيح ");
-				}
+			throw new BankSystemException(Languages.createBundle(client).getString("error_mailNotValid"));		
 		}
 	}
 

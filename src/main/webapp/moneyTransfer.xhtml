@@ -17,12 +17,12 @@
 			        	<br></br>
 			
         	<h:outputText value="username: " />  
-    		<p:inputText value="#{account.transferedUsername}" />
+    		<p:inputText value="#{moneyTransfer.transferedUsername}" />
     		<h:outputText value="     amount of money: " />  
-    		<p:inputText value="#{account.transferedMoney}" />
+    		<p:inputText value="#{moneyTransfer.transferedMoney}" />
 			<br></br>
     		<br></br>
-    		<p:commandButton action="#{account.transferMoney()}" value="transfer money" update="growl"/>
+    		<p:commandButton action="#{moneyTransfer.transferMoney}" value="transfer money" update="growl"/>
     		<br></br>
     		<br></br>
     		
@@ -33,8 +33,8 @@
 			            overflow-y: auto;
 			        }
 			    </style>
-			  <p:dataTable value="#{account.showTransactions()}" var="item"  selection="#{transaction.selectedTransaction}" 
-			  rowSelectListener="#{transaction.onRowSelect}" selectionMode="single" rowKey="#{item.getId()}">
+			  <p:dataTable value="#{moneyTransfer.showTransactions()}" var="item"  
+			  selectionMode="single" rowKey="#{item.getId()}">
 			    <p:column headerText="first account">
 			      <h:outputText value="#{item.getFromAccount().getClient().getName()}" />
 			    </p:column>
@@ -44,9 +44,18 @@
 			    <p:column headerText="status">
 			      <h:outputText value="#{item.getDescription()}" />
 			    </p:column>
+			    <p:column headerText="amount of money">
+			      <h:outputText value="#{item.amountOfTransferedMoney}" />
+			    </p:column>
+			    
 			  </p:dataTable>
 			</p:dialog> 
-			<p:commandButton value="show transactions" onclick="PF('tableDialog').show()" />  
+			<p:commandButton value="show transactions" onclick="PF('tableDialog').show()" /> 
+			<br></br>
+    		<br></br>
+			<p:commandButton value="logout"  action="#{moneyTransfer.logOut()}" update="growl" 
+    		 	styleClass="mr-2" style="width: 10rem" >
+    		 </p:commandButton> 
 	</h:form>
 	</h:body>
 </html>

@@ -13,26 +13,33 @@ public class TransactionService {
 	{//move all validators up before the session
 		try 
 		{
-			Session session;
-			session = SessionService.startSession();
 			if(transaction==null)
-			{
-				SessionService.endSession(session);
 				throw new BankSystemException("can't edit this transaction");
+			if(transaction.getDescription().equals("pending") && status.equals("pending"))
+			{	
+				System.out.println("same state which is: "+transaction.getDescription());
+				throw new BankSystemException("same state which is: "+transaction.getDescription());
 			}
 			if(!(transaction.getDescription().equals("pending")))
-			{
+			{	
+				System.out.println("this transaction has already been "+transaction.getDescription());
 				throw new BankSystemException("this transaction has already been "+transaction.getDescription());
 			}
-			else{
-				transaction.setDescription(status);
-				session.update(transaction);
-				if(status.equals("approved"))
-					approveTransaction(session,transaction);
-				else if(status.equals("rejected"))
-					rejectTransaction(session,transaction);
-				SessionService.endSession(session);
+			if(transaction.getFromAccount().getAmount()<transaction.getAmountOfTransferedMoney())
+			{
+				rejectTransaction(transaction);
+				status="rejected";
 			}
+			Session session;
+			session = SessionService.startSession();
+			transaction.setDescription(status);
+			session.update(transaction);
+			if(status.equals("approved"))
+				approveTransaction(session,transaction);
+			else if(status.equals("rejected"))
+				rejectTransaction(transaction);
+			SessionService.endSession(session);
+			
 		}
 		catch(BankSystemException e) {
 			throw new BankSystemException(e.getMessage());
@@ -62,7 +69,7 @@ public class TransactionService {
 
 	}
 	
-	public static void rejectTransaction(Session session,Transaction transaction)
+	public static void rejectTransaction(Transaction transaction) 
 	{
 		
 	}

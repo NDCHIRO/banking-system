@@ -9,7 +9,7 @@ public class ExceptionLogger {
 
     public static void logException(Exception e) {
         //logger.info(e.getMessage());
-        //logger.log(Level.SEVERE, "An exception occurred", e);
+        logger.log(Level.SEVERE, "An exception occurred", e.getMessage());
         e.printStackTrace();
     }
     
